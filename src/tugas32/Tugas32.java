@@ -7,84 +7,102 @@ package tugas32;
  */
 public class Tugas32
 {
-    final int N = 4;
- 
-  
-    void printSolution(int sol[][])
-    {
-        for (int i = 0; i < N; i++)
-        {
-            for (int j = 0; j < N; j++)
-                System.out.print(" " + sol[i][j] +
-                                 " ");
-            System.out.println();
-        }
-    }
- 
-    boolean isSafe(int maze[][], int x, int y)
-    {
-        
-        return (x >= 0 && x < N && y >= 0 &&
-                y < N && maze[x][y] == 1);
-    }
- 
-    boolean solveMaze(int maze[][])
-    {
-        int sol[][] = {{0, 0, 0, 0},
-            {0, 0, 0, 0},
-            {0, 0, 0, 0},
-            {0, 0, 0, 0}
-        };
- 
-        if (solveMazeUtil(maze, 0, 0, sol) == false)
-        {
-            System.out.print("Solution doesn't exist");
-            return false;
-        }
- 
-        printSolution(sol);
-        return true;
-    }
- 
-    boolean solveMazeUtil(int maze[][], int x, int y,
-                          int sol[][])
-    {
-      
-        if (x == N - 1 && y == N - 1)
-        {
-            sol[x][y] = 1;
-            return true;
-        }
- 
-        if (isSafe(maze, x, y) == true)
-        {
-           
-            sol[x][y] = 1;
- 
-           
-            if (solveMazeUtil(maze, x + 1, y, sol))
-                return true;
- 
-           
-            if (solveMazeUtil(maze, x, y + 1, sol))
-                return true;
- 
-           
-            sol[x][y] = 0;
-            return false;
-        }
- 
-        return false;
-    }
- 
-    public static void main(String args[])
-    {
-        Tugas32 rat = new Tugas32();
-        int maze[][] = {{1, 0, 0, 0},
-            {1, 1, 0, 1},
-            {0, 1, 0, 0},
-            {1, 1, 1, 1}
-        };
-        rat.solveMaze(maze);
-    }
+  public int[][] solution;
+
+	//initialize the solution matrix in constructor.
+	public Tugas32(int N) {
+		solution = new int[N][N];
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				solution[i][j] = 0;
+			}
+		}
+	}
+
+	public void solveMaze(int[][] maze, int N) {
+		if (findPath(maze, 0, 0, N, "down")) {
+			print(solution, N);
+		}else{
+			System.out.println("NO PATH FOUND");
+		}
+		
+	}
+
+	public boolean findPath(int[][] maze, int x, int y, int N, String direction) {
+		// check if maze[x][y] is feasible to move
+		if(x==N-1 && y==N-1){//we have reached
+			solution[x][y] = 1;
+			return true;
+		}
+		if (isSafeToGo(maze, x, y, N)) {
+			// move to maze[x][y]
+			solution[x][y] = 1;			
+			// now rat has four options, either go right OR go down or left or go up
+			if(direction!="up" && findPath(maze, x+1, y, N, "down")){ //go down
+				return true;
+			}
+			//else go down
+			if(direction!="left" && findPath(maze, x, y+1, N,"right")){ //go right
+				return true;
+			}
+			if(direction!="down" && findPath(maze, x-1, y, N, "up")){ //go up
+				return true;
+			}
+			if(direction!="right" &&  findPath(maze, x, y-1, N, "left")){ //go left
+				return true;
+			}
+                        if(direction!="North West" &&  findPath(maze, x-1, y+1, N, "North West")){ //go left
+				return true;
+			}
+                        if(direction!="North East" &&  findPath(maze, x+1, y+1, N, "North East  ")){ //go left
+				return true;
+			}
+                        if(direction!="South West" &&  findPath(maze, x-1, y-1, N, "South West")){ //go left
+				return true;
+			}
+                        if(direction!="South East" &&  findPath(maze, x+1, y-1, N, "South East")){ //go left
+				return true;
+			}
+                         
+			//if none of the options work out BACKTRACK undo the move
+			solution[x][y] = 0;
+			return false;
+		}
+		return false;
+	}
+
+	// this function will check if mouse can move to this cell
+	public boolean isSafeToGo(int[][] maze, int x, int y, int N) {
+		// check if x and y are in limits and cell is not blocked
+		if (x >= 0 && y >= 0 && x < N  && y < N && maze[x][y] != 0) {
+			return true;
+		}
+		return false;
+	}
+	public void print(int [][] solution, int N){
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				System.out.print(" " + solution[i][j]);
+			}
+			System.out.println();
+		}
+	}
+	public static void main(String[] args) {
+		int N = 10;
+		int[][] maze = { 
+                    { 1, 0, 0, 0, 0, 0, 1, 1, 1, 1 },
+                    { 1, 1, 1, 1, 1, 0, 1, 0, 1, 1 }, 
+                    { 1, 1, 1, 0, 1, 0, 1, 1, 1, 1 },
+		    { 1, 0, 1, 0, 1, 0, 1, 0, 0, 1 },
+                    { 1, 0, 1, 0, 1, 0, 1, 0, 1, 1 },
+                    { 1, 0, 0, 0, 1, 0, 1, 0, 1, 0 },
+                    { 1, 0, 1, 1, 1, 0, 1, 0, 1, 0 },
+                    { 1, 0, 1, 0, 0, 0, 1, 0, 1, 1 },
+                    { 0, 1, 1, 1, 1, 1, 1, 0, 1, 1 },
+                    { 1, 1, 1, 1, 0, 0, 0, 0, 1, 1 }
+                };
+		Tugas32 r = new Tugas32(N);
+		r.solveMaze(maze, N);
+	}
+
 }
