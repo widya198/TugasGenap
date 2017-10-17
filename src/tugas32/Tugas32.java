@@ -9,7 +9,7 @@ public class Tugas32
 {
   public int[][] solution;
 
-	//initialize the solution matrix in constructor.
+	
 	public Tugas32(int N) {
 		solution = new int[N][N];
 		for (int i = 0; i < N; i++) {
@@ -29,51 +29,50 @@ public class Tugas32
 	}
 
 	public boolean findPath(int[][] maze, int x, int y, int N, String direction) {
-		// check if maze[x][y] is feasible to move
-		if(x==N-1 && y==N-1){//we have reached
+		
+		if(x==N-1 && y==N-1){
 			solution[x][y] = 1;
 			return true;
 		}
 		if (isSafeToGo(maze, x, y, N)) {
-			// move to maze[x][y]
+			
 			solution[x][y] = 1;			
-			// now rat has four options, either go right OR go down or left or go up
-			if(direction!="up" && findPath(maze, x+1, y, N, "down")){ //go down
+			
+			if(direction!="up" && findPath(maze, x+1, y, N, "down")){ //bawah
 				return true;
 			}
-			//else go down
-			if(direction!="left" && findPath(maze, x, y+1, N,"right")){ //go right
+			//selain kebawah
+			if(direction!="left" && findPath(maze, x, y+1, N,"right")){ //kanan
 				return true;
 			}
-			if(direction!="down" && findPath(maze, x-1, y, N, "up")){ //go up
+			if(direction!="down" && findPath(maze, x-1, y, N, "up")){ //atas
 				return true;
 			}
-			if(direction!="right" &&  findPath(maze, x, y-1, N, "left")){ //go left
+			if(direction!="right" &&  findPath(maze, x, y-1, N, "left")){ //kiri
 				return true;
 			}
-                        if(direction!="North West" &&  findPath(maze, x-1, y+1, N, "North West")){ //go left
+                        if(direction!="North West" &&  findPath(maze, x-1, y+1, N, "North West")){ //kiri
 				return true;
 			}
-                        if(direction!="North East" &&  findPath(maze, x+1, y+1, N, "North East  ")){ //go left
+                        if(direction!="North East" &&  findPath(maze, x+1, y+1, N, "North East  ")){ //kiri
 				return true;
 			}
-                        if(direction!="South West" &&  findPath(maze, x-1, y-1, N, "South West")){ //go left
+                        if(direction!="South West" &&  findPath(maze, x-1, y-1, N, "South West")){ //kiri
 				return true;
 			}
-                        if(direction!="South East" &&  findPath(maze, x+1, y-1, N, "South East")){ //go left
-				return true;
+                        if(direction!="South East" &&  findPath(maze, x+1, y-1, N, "South East")){ //kiri
 			}
                          
-			//if none of the options work out BACKTRACK undo the move
+			//jika tdk ada piliham work out BACKTRACK undo the move
 			solution[x][y] = 0;
 			return false;
 		}
 		return false;
 	}
 
-	// this function will check if mouse can move to this cell
+	
 	public boolean isSafeToGo(int[][] maze, int x, int y, int N) {
-		// check if x and y are in limits and cell is not blocked
+		
 		if (x >= 0 && y >= 0 && x < N  && y < N && maze[x][y] != 0) {
 			return true;
 		}
